@@ -83,11 +83,11 @@ const Email = localStorage.getItem("email") || "";
                     </div>
                     <div className="use-info res-hide">
                      <h4>
-  {Username}
+  {Username  || "Admin"}
   <MdArrowDropDown style={{ fontSize: "22px" }} />
 </h4>
 
-<p className="mb-0">{Email}</p>
+<p className="mb-0">{Email || "Admin@gmail.com"}</p>
                     </div>
                   </Button>
                   <Menu
