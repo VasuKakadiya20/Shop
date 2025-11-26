@@ -70,7 +70,7 @@ const AddClient = () => {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Name*</label>
+                    <label>Name *</label>
                     <input
                       type="text"
                       name="name"
@@ -82,7 +82,7 @@ const AddClient = () => {
                   </div>
 
                   <div className="form-group">
-                    <label>Phone Number*</label>
+                    <label>Phone Number *</label>
                     <input
                       type="number"
                       name="phone"
@@ -96,7 +96,7 @@ const AddClient = () => {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Email*</label>
+                    <label>Email </label>
                     <input
                       type="email"
                       name="email"
