@@ -57,10 +57,12 @@ const AddClient = () => {
       <div className="slideDown attendance mt-5">
         <div className="attendance-container mt-5">
           <div className="table-wrapper">
+            {/* Header */}
             <div className="table-header">
               <span>Add Client</span>
             </div>
 
+          {/* Add Client From */}
             <div className="add-employee-container">
               <h2 className="form-title">New Client</h2>
 
