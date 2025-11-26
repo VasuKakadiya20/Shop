@@ -1,14 +1,3 @@
-// import React from 'react'
-
-// function Additem() {
-//   return (
-//     <div>
-//       <h1 style={{marginTop:"100px" ,marginLeft:"250px" }}>hello</h1>
-//     </div>
-//   )
-// }
-
-// export default Additem
 import React, { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -30,6 +19,7 @@ export default function InvoicePage() {
   const [date, setDate] = useState(todaydate);
   const [items, setItems] = useState([]);
   const [clientList, setClientList] = useState([]);
+  const [Iitem, setIItems] = useState([])
   const [currentItem, setCurrentItem] = useState({ name: "", qty: "", price: "", hsncode: "" });
 
   // item Adding
@@ -100,7 +90,6 @@ export default function InvoicePage() {
   };
 
   // Fething Data
-  const [Iitem, setIItems] = useState([])
   useEffect(() => {
     fetchDataFromApi("/item/").then((data) => {
       console.log("backend to data:-", data)
@@ -263,6 +252,7 @@ export default function InvoicePage() {
       .trim();
   };
 
+  // Deleted Data
   const Deleteinvoice = (_id) =>{
     Deletedata(`/item/${_id}`).then((res) => {
       console.log("this is item Deleted:-",res)
