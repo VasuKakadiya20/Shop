@@ -1,0 +1,165 @@
+
+.table-wrapper {
+  width: 100%;
+}
+
+.table th,
+.table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.table-header span {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.table-wrapper .iicon svg {
+  height: 60px !important;
+}
+
+.addmeal {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  background-color: #000 !important;
+  color: #fff !important;
+  padding: 10px 18px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: width 0.3s ease-in-out;
+}
+
+.btnsave{
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.btnsave:hover{
+  background-color: #464646 !important;
+  color: #fff !important;
+}
+
+.addmeal .text {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  transform: translateX(20px);
+  transition: all 0.4s ease;
+}
+
+.addmeal:hover {
+  background-color: #000 !important;
+}
+
+.addmeal:hover .text {
+  max-width: 200px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.addmeal .icon {
+  transition: transform 0.4s ease;
+}
+
+.addmeal:hover .icon {
+  transform: translateX(-3px);
+}
+
+/* style */
+.modal.show {
+  display: block !important;
+}
+
+/* .modal {*/
+  /* margin-top: 20% !important; */
+  /* background: rgba(0, 0, 0, 0.4) !important; */
+/*} */
+
+.modal-dialog {
+  margin: 0 auto !important;
+  top: 50%;
+  transform: translateY(-50%) !important;
+}
+
+.modal-content {
+  border-radius: 12px !important;
+  padding: 5px 5px 0 5px;
+  box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.35);
+  border: none !important;
+}
+
+.modal-header {
+  border-bottom: none !important;
+  padding: 20px 25px !important;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-body .form-label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.modal-body input,
+.modal-body select {
+  border-radius: 6px;
+  height: 43px;
+}
+
+.table> :not(caption)>*>* {
+  vertical-align: middle;
+}
+
+.table-bordered th,
+.table-bordered td {
+  background: #fafafa !important;
+}
+
+.modal-footer {
+  border-top: none !important;
+  padding: 20px 25px !important;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+select:focus {
+  border-color: #1a1a1a !important;
+  outline: none;
+}
+.select-fixed {
+  width: 250px !important;
+}
+
+.select-fixed option {
+  width: 250px !important;
+}
+
+.Dicon svg{
+  height: 60px !important;
+}
+.action{
+  text-align: center;
+  gap: 2px !important;
+  display: flex;
+}
