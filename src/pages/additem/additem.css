@@ -78,6 +78,10 @@
   /* background: rgba(0, 0, 0, 0.4) !important; */
 /*} */
 
+.modal {
+  height: 100%;
+}
+
 .modal-dialog {
   margin: 0 auto !important;
   top: 50%;

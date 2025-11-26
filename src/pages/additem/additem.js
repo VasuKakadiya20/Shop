@@ -284,7 +284,7 @@ export default function InvoicePage() {
   return (
     <>
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />
-      <div className="slideDown attendance mt-5">
+      <div className="slideDown attendance mt-5" style={{height:"100%"}}>
         <div className="container py-4" style={{ marginTop: "20px" }}>
           {/* Header */}
           <div className="d-flex justify-content-between align-items-center mb-3">
