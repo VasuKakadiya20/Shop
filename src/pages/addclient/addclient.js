@@ -103,7 +103,6 @@ const AddClient = () => {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="Enter email"
-                      required
                     />
                   </div>
                   <div className="form-group"></div>
