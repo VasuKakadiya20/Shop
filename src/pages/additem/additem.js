@@ -10,6 +10,7 @@ import { FaFileInvoice } from "react-icons/fa6";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { FaEdit } from "react-icons/fa";
+import { Switch, FormControlLabel } from "@mui/material";
 
 export default function InvoicePage() {
   const todaydate = new Date().toISOString().split("T")[0];
@@ -20,6 +21,7 @@ export default function InvoicePage() {
   const [items, setItems] = useState([]);
   const [clientList, setClientList] = useState([]);
   const [Iitem, setIItems] = useState([])
+  const [addgst, setaddgest] = useState(true)
   const [currentItem, setCurrentItem] = useState({ name: "", qty: "", price: "", hsncode: "" });
 
   // item Adding
@@ -56,7 +58,8 @@ export default function InvoicePage() {
       cname: clientName,
       Payment: paymentMethod,
       Date: date,
-      items: formattedItems
+      items: formattedItems,
+      addgst: addgst
     };
 
     try {
@@ -102,17 +105,17 @@ export default function InvoicePage() {
     doc.setFontSize(16);
     doc.text("TAX INVOICE", 105, 15, { align: "center" });
 
-    doc.setFontSize(22);
-    doc.text("BRAKERY", 105, 25, { align: "center" });
+    doc.setFontSize(20);
+    doc.text("Marvel Crunch Chikki", 105, 25, { align: "center" });
 
     doc.setFontSize(10);
     doc.text(
-      "GROUND FLOOR A 101 - MAHADEV SOC., NANA VARACHA, SURAT.",
+      "Plot no 133, Shreeji textile Velenja sayan road Nr ramvatika Velenja-394150.",
       105,
       31,
       { align: "center" }
     );
-    doc.text("GST No. ABC2DGE4786", 105, 36, { align: "center" });
+    doc.text("GST No. 24GCFPB5431P1ZH", 105, 36, { align: "center" });
 
     autoTable(doc, {
       startY: 42,
@@ -143,17 +146,16 @@ export default function InvoicePage() {
       p.total ? p.total : p.qty * p.price
     ]);
 
+    // Calculate total without GST
     const totalAmount = productRows.reduce((sum, row) => sum + Number(row[5]), 0);
-    console.log("totalAmount", totalAmount)
-    const calculateRoundOff = (amount) => {
-      const rounded = Math.round(amount);
-      const diff = (rounded - amount).toFixed(2);
-      return diff;
-    };
+    const gstRate = 0.05;
+    const gstAmount = totalAmount * gstRate;
+    const unroundedTotal = totalAmount + gstAmount;
+    const roundedTotal = Math.round(unroundedTotal);
+    const roundoff = (roundedTotal - unroundedTotal).toFixed(2);
+    const finalAmount = roundedTotal.toFixed(2);
+    console.log("Final Invoice Amount:", finalAmount);
 
-    const roundoff = calculateRoundOff(totalAmount)
-    console.log("roundoff", roundoff)
-    const finalAmount = Math.round(totalAmount + totalAmount * 0.05).toFixed(2)
 
     autoTable(doc, {
       head: [["Description of Goods", "HSN CODE", "QTY", "Units", "Rate", "Amount"]],
@@ -176,66 +178,110 @@ export default function InvoicePage() {
       tableWidth: "auto"
     });
 
-    autoTable(doc, {
-      startY: doc.lastAutoTable.finalY,
-      theme: "grid",
-      styles: { fontSize: 11, cellPadding: 3 },
+    if (items.addgst === "true") {
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY,
+        theme: "grid",
+        styles: { fontSize: 11, cellPadding: 3 },
 
-      body: [
+        body: [
 
-        [
-          { content: "Total" },
-          { content: totalAmount.toString(), styles: { halign: "right", fontStyle: "bold" } }
-        ],
-        [
-          { content: "Taxable Value", styles: { fontStyle: "bold", fontSize: 10 } },
-          { content: totalAmount.toString(), styles: { halign: "right", fontStyle: "bold" } }
-        ],
-        [
-          { content: "ADD CGST 2.5%", styles: { fontStyle: "bold", fontSize: 10 } },
-          { content: (totalAmount * 0.025).toFixed(2), styles: { halign: "right" } }
-        ],
-        [
-          { content: "ADD SGST 2.5%", styles: { fontStyle: "bold", fontSize: 10 } },
-          { content: (totalAmount * 0.025).toFixed(2), styles: { halign: "right" } }
-        ],
-        [
-          { content: "ROUND OFF", styles: { fontSize: 8 } },
-          { content: roundoff, styles: { halign: "right" } }
-        ],
-        [
-          { content: "Total", styles: { fontStyle: "bold", fontSize: 10 } },
-          {
-            content: finalAmount,
-            styles: { halign: "right", fontStyle: "bold" }
-          }
-        ],
-      ]
-    });
-
-    autoTable(doc, {
-      startY: doc.lastAutoTable.finalY,
-      theme: "grid",
-      styles: { fontSize: 10, cellPadding: 3 },
-
-      body: [
-        [
-          {
-            content:
-              "Amount Chargeable (in words)\n" +
-              "Rupees " +
-              numberToWords(finalAmount),
-            colSpan: 3
-          },
-          {
-            content:
-              "FOR BRAKERY\n\nABC \nAuthorised Signatory",
-            colSpan: 3,
-            styles: { halign: "right" }
-          }
+          [
+            { content: "Total" },
+            { content: totalAmount.toString(), styles: { halign: "right", fontStyle: "bold" } }
+          ],
+          [
+            { content: "Taxable Value", styles: { fontStyle: "bold", fontSize: 10 } },
+            { content: totalAmount.toString(), styles: { halign: "right", fontStyle: "bold" } }
+          ],
+          [
+            { content: "ADD CGST 2.5%", styles: { fontStyle: "bold", fontSize: 10 } },
+            { content: (totalAmount * 0.025).toFixed(2), styles: { halign: "right" } }
+          ],
+          [
+            { content: "ADD SGST 2.5%", styles: { fontStyle: "bold", fontSize: 10 } },
+            { content: (totalAmount * 0.025).toFixed(2), styles: { halign: "right" } }
+          ],
+          [
+            { content: "ROUND OFF", styles: { fontSize: 8 } },
+            { content: roundoff, styles: { halign: "right" } }
+          ],
+          [
+            { content: "Total", styles: { fontStyle: "bold", fontSize: 10 } },
+            {
+              content: finalAmount,
+              styles: { halign: "right", fontStyle: "bold" }
+            }
+          ],
         ]
-      ]
-    });
+      });
+
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY,
+        theme: "grid",
+        styles: { fontSize: 10, cellPadding: 3 },
+
+        body: [
+          [
+            {
+              content:
+                "Amount Chargeable (in words)\n" +
+                "Rupees " +
+                numberToWords(finalAmount),
+              colSpan: 3
+            },
+            {
+              content:
+                "For Marvel Crunch Chikki\n \n \nAuthorised Signatory",
+              colSpan: 3,
+              styles: { halign: "right" }
+            }
+          ]
+        ]
+      });
+      console.log("Add The Gst !")
+    } else {
+      console.log("not add the gst ")
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY,
+        theme: "grid",
+        styles: { fontSize: 11, cellPadding: 3 },
+
+        body: [
+
+          [
+            { content: "Total" ,colSpan: 3},
+            { content: Math.round(totalAmount).toString(), styles: { halign: "right", fontStyle: "bold" },colSpan: 3 }
+            // { content: totalAmount.toString(), styles: { halign: "right", fontStyle: "bold" } }
+          ],
+        ]
+      });
+
+      autoTable(doc, {
+        startY: doc.lastAutoTable.finalY,
+        theme: "grid",
+        styles: { fontSize: 10, cellPadding: 3 },
+
+        body: [
+          [
+            {
+              content:
+                "Amount Chargeable (in words)\n" +
+                "Rupees " +
+                numberToWords(totalAmount),
+              colSpan: 3
+            },
+            {
+              content:
+                "For Marvel Crunch Chikki\n \n \nAuthorised Signatory",
+              colSpan: 3,
+              styles: { halign: "right" }
+            }
+          ]
+        ]
+      });
+    }
+
 
     doc.save(`${items.cname}_Invoice.pdf`);
     toast.success("Invoices Download!")
@@ -253,16 +299,16 @@ export default function InvoicePage() {
   };
 
   // Deleted Data
-  const Deleteinvoice = (_id) =>{
+  const Deleteinvoice = (_id) => {
     Deletedata(`/item/${_id}`).then((res) => {
-      console.log("this is item Deleted:-",res)
-     fetchDataFromApi("/item/").then((data) => {
-      console.log("backend to data:-", data)
-      setIItems(data)
-    })
+      console.log("this is item Deleted:-", res)
+      fetchDataFromApi("/item/").then((data) => {
+        console.log("backend to data:-", data)
+        setIItems(data)
+      })
     })
   }
-  
+
   // const updateitem = (_id) =>{
   //   setShowForm(true)
   //   fetchDataFromApi(`/item/${_id}`).then((res) => {
@@ -274,7 +320,7 @@ export default function InvoicePage() {
   return (
     <>
       <ToastContainer position="top-right" autoClose={2000} theme="colored" />
-      <div className="slideDown attendance mt-5" style={{height:"100%"}}>
+      <div className="slideDown attendance mt-5" style={{ height: "100%" }}>
         <div className="container py-4" style={{ marginTop: "20px" }}>
           {/* Header */}
           <div className="d-flex justify-content-between align-items-center mb-3">
@@ -317,7 +363,7 @@ export default function InvoicePage() {
                       </select>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <label className="form-label">Payment Method</label>
                       <select
                         className="form-control"
@@ -331,13 +377,26 @@ export default function InvoicePage() {
                       </select>
                     </div>
 
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <label className="form-label">Date</label>
                       <input
                         type="date"
                         className="form-control"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-2">
+                      <label className="form-label">Add Gst</label>
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={addgst}
+                            onChange={(e) => setaddgest(e.target.checked)}
+                            color="success"
+                          />
+                        }
+                        label={addgst ? "ADD GST" : "Not ADD GST"}
                       />
                     </div>
                   </div>
@@ -467,10 +526,10 @@ export default function InvoicePage() {
                       <td>{items.Payment}</td>
                       <td>{items.totalitems}</td>
                       <td className="iicon mr-5" onClick={() => invoice(items)}><FaFileInvoice style={{ cursor: "pointer" }} /></td>
-                      <td className="gap-5"> 
-                          <MdDelete style={{ cursor: "pointer", height: "1.5em", width:"1.5em", marginLeft:"10px "}} className="Dicon ml-5" onClick={() => Deleteinvoice(items._id)}/>
-                          {/* <FaEdit style={{cursor: "pointer" , height:"1.5em", width: "1.5em"}} className="Dicon" onClick={()=>updateitem(items._id)}/> */}
-                  </td>
+                      <td className="gap-5">
+                        <MdDelete style={{ cursor: "pointer", height: "1.5em", width: "1.5em", marginLeft: "10px " }} className="Dicon ml-5" onClick={() => Deleteinvoice(items._id)} />
+                        {/* <FaEdit style={{cursor: "pointer" , height:"1.5em", width: "1.5em"}} className="Dicon" onClick={()=>updateitem(items._id)}/> */}
+                      </td>
                     </tr>
                   ))
                 }
